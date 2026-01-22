@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gruv-bg: #282828;
+  --color-gruv-bg-soft: #32302f;
+  --color-gruv-bg-dark: #1d2021;
+  --color-gruv-terminal: #000000;
+  --color-gruv-fg: #ebdbb2;
+  --color-gruv-fg-dim: #a89984;
+  --color-gruv-orange: #fe8019;
+  --color-gruv-green: #b8bb26;
+  --color-gruv-yellow: #fabd2f;
+  --color-gruv-blue: #83a598;
+  --color-gruv-red: #fb4934;
+  --color-gruv-aqua: #8ec07c;
+  --color-primary: #fe8019;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --radius-default: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+}
+
+@layer base {
+  :root {
+    --gruv-bg: #282828;
+    --gruv-bg-soft: #32302f;
+    --gruv-fg: #ebdbb2;
+    --gruv-orange: #fe8019;
+    --gruv-green: #b8bb26;
+    --gruv-yellow: #fabd2f;
+    --gruv-blue: #83a598;
+  }
+
+  body {
+    @apply bg-gruv-bg font-display text-gruv-fg selection:bg-gruv-orange/30 selection:text-gruv-orange transition-colors duration-300;
+  }
+}
+
+@layer components {
+  .kbd-key {
+    @apply px-1.5 py-0.5 text-[10px] font-mono font-bold text-gruv-fg bg-gruv-bg border border-gruv-fg-dim/30 rounded shadow-[0_1.5px_0_rgba(168,153,132,0.3)];
+  }
+
+  .terminal-container {
+    background: linear-gradient(
+      135deg,
+      rgba(254, 128, 25, 0.2) 0%,
+      rgba(40, 40, 40, 0) 100%
+    );
+  }
+
+  .gruv-shadow {
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.7);
+  }
+
+  .terminal-line-height {
+    line-height: 1.4;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}

@@ -1,2 +1,1 @@
-# fm-landing
-landing page for fm project
+Official landing page for [fm](https://github.com/zulfikawr/fm).
