@@ -1,0 +1,6 @@
+name = "fm-landing"
+compatibility_date = "2026-01-22"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
