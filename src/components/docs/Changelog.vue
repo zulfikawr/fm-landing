@@ -1,41 +1,43 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { marked } from 'marked'
-import hljs from 'highlight.js/lib/core'
-import bash from 'highlight.js/lib/languages/bash'
-import go from 'highlight.js/lib/languages/go'
-import json from 'highlight.js/lib/languages/json'
+import { ref, onMounted } from "vue";
+import { marked } from "marked";
+import hljs from "highlight.js/lib/core";
+import bash from "highlight.js/lib/languages/bash";
+import go from "highlight.js/lib/languages/go";
+import json from "highlight.js/lib/languages/json";
 
-hljs.registerLanguage('bash', bash)
-hljs.registerLanguage('go', go)
-hljs.registerLanguage('json', json)
+hljs.registerLanguage("bash", bash);
+hljs.registerLanguage("go", go);
+hljs.registerLanguage("json", json);
 
-const changelogHtml = ref('')
-const isLoading = ref(true)
+const changelogHtml = ref("");
+const isLoading = ref(true);
 
 onMounted(async () => {
   try {
-    const response = await fetch('https://raw.githubusercontent.com/zulfikawr/fm/main/CHANGELOG.md')
-    const text = await response.text()
-    
+    const response = await fetch(
+      "https://raw.githubusercontent.com/zulfikawr/fm/main/CHANGELOG.md",
+    );
+    const text = await response.text();
+
     // In newer marked versions, we handle highlighting after parsing
-    const html = await marked.parse(text) as string
-    changelogHtml.value = html
-    
+    const html = (await marked.parse(text)) as string;
+    changelogHtml.value = html;
+
     // Trigger highlight for any code blocks in the dynamic HTML
     setTimeout(() => {
-      document.querySelectorAll('.changelog-md pre code').forEach((el) => {
-        hljs.highlightElement(el as HTMLElement)
-      })
-    }, 100)
-    
+      document.querySelectorAll(".changelog-md pre code").forEach((el) => {
+        hljs.highlightElement(el as HTMLElement);
+      });
+    }, 100);
   } catch (error) {
-    console.error('Failed to fetch changelog:', error)
-    changelogHtml.value = '<p style="color: var(--color-gruv-red)">Failed to load changelog.</p>'
+    console.error("Failed to fetch changelog:", error);
+    changelogHtml.value =
+      '<p style="color: var(--color-gruv-red)">Failed to load changelog.</p>';
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-})
+});
 </script>
 
 <template>
@@ -43,8 +45,10 @@ onMounted(async () => {
     <h2 class="text-3xl font-bold text-gruv-fg mb-8 flex items-center gap-3">
       <span class="text-gruv-orange">#</span> Changelog
     </h2>
-    
-    <div v-if="isLoading" class="text-gruv-fg-dim italic">Loading changelog...</div>
+
+    <div v-if="isLoading" class="text-gruv-fg-dim italic">
+      Loading changelog...
+    </div>
     <div v-else class="changelog-md" v-html="changelogHtml"></div>
   </section>
 </template>
@@ -132,11 +136,39 @@ onMounted(async () => {
 }
 
 /* Gruvbox Syntax Highlighting */
-.hljs-comment { color: var(--color-gruv-fg-dim); font-style: italic; }
-.hljs-keyword, .hljs-selector-tag { color: var(--color-gruv-red); font-weight: bold; }
-.hljs-string { color: var(--color-gruv-green); }
-.hljs-title, .hljs-section { color: var(--color-gruv-yellow); font-weight: bold; }
-.hljs-variable, .hljs-template-variable { color: var(--color-gruv-blue); }
-.hljs-type, .hljs-built_in, .hljs-bullet, .hljs-number, .hljs-addition { color: var(--color-gruv-orange); }
-.hljs-symbol, .hljs-attr, .hljs-selector-attr, .hljs-selector-pseudo, .hljs-link { color: var(--color-gruv-aqua); }
+.hljs-comment {
+  color: var(--color-gruv-fg-dim);
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag {
+  color: var(--color-gruv-red);
+  font-weight: bold;
+}
+.hljs-string {
+  color: var(--color-gruv-green);
+}
+.hljs-title,
+.hljs-section {
+  color: var(--color-gruv-yellow);
+  font-weight: bold;
+}
+.hljs-variable,
+.hljs-template-variable {
+  color: var(--color-gruv-blue);
+}
+.hljs-type,
+.hljs-built_in,
+.hljs-bullet,
+.hljs-number,
+.hljs-addition {
+  color: var(--color-gruv-orange);
+}
+.hljs-symbol,
+.hljs-attr,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-link {
+  color: var(--color-gruv-aqua);
+}
 </style>
