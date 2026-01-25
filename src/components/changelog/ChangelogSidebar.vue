@@ -31,8 +31,8 @@ const getVersionId = (version: string) => {
         "
       >
         <span>v{{ version }}</span>
-        <span 
-          v-if="index === 0" 
+        <span
+          v-if="index === 0"
           class="text-[10px] bg-gruv-orange/20 text-gruv-orange px-1.5 py-0.5 rounded-full font-bold uppercase tracking-tighter"
         >
           latest
