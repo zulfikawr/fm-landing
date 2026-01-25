@@ -22,8 +22,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="px-6 pt-16 pb-16 md:pb-24 max-w-[1200px] mx-auto">
-    <div class="flex flex-col lg:flex-row gap-12 items-center">
+  <div
+    class="px-6 py-16 md:py-24 max-w-[1200px] mx-auto lg:min-h-[calc(100vh-73px)] flex items-center"
+  >
+    <div class="flex flex-col lg:flex-row gap-12 items-center w-full">
       <div class="flex flex-col gap-8 flex-1">
         <div class="flex flex-col gap-4">
           <h1
