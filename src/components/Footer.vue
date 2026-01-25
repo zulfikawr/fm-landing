@@ -23,9 +23,7 @@
             >
           </li>
           <li>
-            <a class="hover:text-gruv-orange" href="/docs#changelog"
-              >Changelog</a
-            >
+            <a class="hover:text-gruv-orange" href="/changelog">Changelog</a>
           </li>
           <li>
             <a

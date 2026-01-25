@@ -20,6 +20,12 @@ import { Icon } from "@iconify/vue";
 
       <div class="flex items-center gap-4">
         <router-link
+          to="/changelog"
+          class="text-sm font-bold text-gruv-fg-dim hover:text-gruv-orange px-4 py-2 transition-all"
+        >
+          Changelog
+        </router-link>
+        <router-link
           to="/docs"
           class="text-sm font-bold text-gruv-fg-dim hover:text-gruv-orange px-4 py-2 rounded border border-gruv-fg-dim/20 hover:border-gruv-orange/50 transition-all"
         >
