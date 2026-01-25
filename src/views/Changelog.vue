@@ -44,58 +44,67 @@ onMounted(async () => {
     }
 
     // Process markdown to add IDs to headers for scrolling
-    // This is a simple replacement, might need more robust handling if headers are complex
+    // We add a marker to identify and set IDs after parsing
     processedText = processedText.replace(
       /##\s+\[?v?(\d+\.\d+\.\d+)\]?/g,
       (_match, version) => {
-        return `## <a id="v${version.replace(/\./g, "-")}"></a>[v${version}]`;
+        return `## [v${version}] <!-- id:v${version.replace(/\./g, "-")} -->`;
       },
     );
 
     const html = (await marked.parse(processedText)) as string;
-    changelogHtml.value = html;
+    
+    // Post-process HTML to move IDs from comments to headers
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    tempDiv.querySelectorAll('h2').forEach(h2 => {
+      const commentMatch = h2.innerHTML.match(/<!--\s*id:(v[\w-]+)\s*-->/);
+      if (commentMatch && commentMatch[1]) {
+        h2.id = commentMatch[1];
+        h2.innerHTML = h2.innerHTML.replace(/<!--\s*id:v[\w-]+\s*-->/, '');
+        h2.classList.add('scroll-mt-24');
+      }
+    });
+    
+    changelogHtml.value = tempDiv.innerHTML;
 
     await nextTick();
     document.querySelectorAll(".changelog-md pre code").forEach((el) => {
       hljs.highlightElement(el as HTMLElement);
     });
 
-    // Setup intersection observer for TOC
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.getAttribute("id");
-            if (id && id.startsWith("v")) {
-              activeVersion.value = id.substring(1).replace(/-/g, ".");
-            }
-          }
-        });
-      },
-      {
-        rootMargin: "-100px 0px -80% 0px",
-        threshold: 0,
-      },
-    );
-
-    document.querySelectorAll(".changelog-md h2 a[id]").forEach((el) => {
-      const parentH2 = el.parentElement;
-      if (parentH2) {
-        // Move ID to H2 for better intersection observing
-        const id = el.getAttribute("id");
-        if (id) {
-          parentH2.setAttribute("id", id);
-          observer.observe(parentH2);
-        }
-      }
-    });
-  } catch (error) {
-    console.error("Failed to fetch changelog:", error);
-    changelogHtml.value =
-      '<p style="color: var(--color-gruv-red)">Failed to load changelog.</p>';
-  } finally {
+    } finally {
     isLoading.value = false;
   }
+
+  // Setup intersection observer for TOC after loading is complete
+  await nextTick();
+  
+  const observer = new IntersectionObserver(
+    (entries) => {
+      // Filter for elements that are currently entering or inside the viewport
+      const intersecting = entries.filter(e => e.isIntersecting);
+      if (intersecting.length > 0) {
+        // Find the one closest to the top of the viewport
+        const topMost = intersecting.reduce((prev, curr) => {
+          return (Math.abs(curr.boundingClientRect.top) < Math.abs(prev.boundingClientRect.top)) ? curr : prev;
+        });
+        
+        const id = topMost.target.id;
+        if (id && id.startsWith("v")) {
+          activeVersion.value = id.substring(1).replace(/-/g, ".");
+        }
+      }
+    },
+    {
+      rootMargin: "-80px 0px -80% 0px",
+      threshold: [0, 1.0],
+    },
+  );
+
+  document.querySelectorAll(".changelog-md h2[id^='v']").forEach((el) => {
+    observer.observe(el);
+  });
 });
 </script>
 
