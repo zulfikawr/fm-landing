@@ -26,11 +26,15 @@ onMounted(async () => {
     const text = await response.text();
 
     // Extract versions for sidebar
-    const versionMatch = text.match(/##\s+\[?(\d+\.\d+\.\d+)\]?/g);
+    const versionMatch = text.match(/##\s+\[?v?(\d+\.\d+\.\d+)\]?/g);
     if (versionMatch) {
-      versions.value = versionMatch.map((v) =>
-        v.replace(/##\s+\[?/, "").replace(/\]?/, ""),
-      );
+      versions.value = versionMatch
+        .map((v) => {
+          const m = v.match(/(\d+\.\d+\.\d+)/);
+          return m ? m[1] : null;
+        })
+        .filter((v): v is string => v !== null);
+
       if (versions.value.length > 0 && versions.value[0]) {
         activeVersion.value = versions.value[0];
       }
@@ -40,9 +44,9 @@ onMounted(async () => {
     let processedText = text;
     // This is a simple replacement, might need more robust handling if headers are complex
     processedText = processedText.replace(
-      /##\s+\[?(\d+\.\d+\.\d+)\]?/g,
+      /##\s+\[?v?(\d+\.\d+\.\d+)\]?/g,
       (_match, version) => {
-        return `## <a id="v${version.replace(/\./g, "-")}"></a>[${version}]`;
+        return `## <a id="v${version.replace(/\./g, "-")}"></a>[v${version}]`;
       },
     );
 
