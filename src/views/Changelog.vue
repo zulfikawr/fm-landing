@@ -25,8 +25,11 @@ onMounted(async () => {
     );
     const text = await response.text();
 
+    // 1. Remove the main H1 header if it exists to avoid double title
+    let processedText = text.replace(/^#\s+Changelog\s*$/m, "");
+
     // Extract versions for sidebar
-    const versionMatch = text.match(/##\s+\[?v?(\d+\.\d+\.\d+)\]?/g);
+    const versionMatch = processedText.match(/##\s+\[?v?(\d+\.\d+\.\d+)\]?/g);
     if (versionMatch) {
       versions.value = versionMatch
         .map((v) => {
@@ -41,7 +44,6 @@ onMounted(async () => {
     }
 
     // Process markdown to add IDs to headers for scrolling
-    let processedText = text;
     // This is a simple replacement, might need more robust handling if headers are complex
     processedText = processedText.replace(
       /##\s+\[?v?(\d+\.\d+\.\d+)\]?/g,
