@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { Icon } from "@iconify/vue";
+</script>
+
 <template>
   <section id="configuration" class="mb-24 scroll-mt-24">
     <h2 class="text-3xl font-bold text-gruv-fg mb-8 flex items-center gap-3">
@@ -144,7 +148,7 @@
         class="flex-1 p-5 bg-gruv-bg-soft rounded border border-gruv-fg-dim/5"
       >
         <h4 class="text-gruv-fg font-bold mb-2 flex items-center gap-2">
-          <span class="material-symbols-outlined text-sm">settings</span> In-App
+          <Icon icon="mdi:cog" class="text-sm" /> In-App
           Settings
         </h4>
         <p class="text-xs text-gruv-fg-dim leading-relaxed">
@@ -157,7 +161,7 @@
         class="flex-1 p-5 bg-gruv-bg-soft rounded border border-gruv-fg-dim/5"
       >
         <h4 class="text-gruv-fg font-bold mb-2 flex items-center gap-2">
-          <span class="material-symbols-outlined text-sm">edit</span> Manual
+          <Icon icon="mdi:pencil" class="text-sm" /> Manual
           Editing
         </h4>
         <p class="text-xs text-gruv-fg-dim leading-relaxed">

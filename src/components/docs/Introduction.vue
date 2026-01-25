@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { Icon } from "@iconify/vue";
+</script>
+
 <template>
   <section id="introduction" class="mb-20 scroll-mt-24">
     <h1 class="text-4xl font-black text-gruv-fg mb-6">Documentation</h1>
@@ -10,7 +14,7 @@
       class="bg-gruv-bg-soft border border-gruv-fg-dim/10 rounded-lg p-6 mb-8"
     >
       <h3 class="text-gruv-orange font-bold mb-4 flex items-center gap-2">
-        <span class="material-symbols-outlined text-sm">tips_and_updates</span>
+        <Icon icon="mdi:lightbulb-on-outline" class="text-sm" />
         Core Philosophies
       </h3>
       <ul class="space-y-3 text-gruv-fg-dim list-none p-0">

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { Icon } from "@iconify/vue";
 import Preview from "./Preview.vue";
 
 const releaseTag = ref("...");
@@ -73,14 +74,14 @@ onMounted(async () => {
             rel="noopener noreferrer"
             class="flex min-w-[160px] cursor-pointer items-center justify-center gap-2 rounded h-12 px-6 bg-gruv-orange text-gruv-bg text-base font-bold tracking-wide hover:brightness-110 shadow-lg shadow-gruv-orange/20"
           >
-            <span class="material-symbols-outlined text-[20px]">download</span>
+            <Icon icon="mdi:download" class="text-xl" />
             Download Now
           </a>
           <a
             href="/docs"
             class="flex min-w-[160px] cursor-pointer items-center justify-center gap-2 rounded h-12 px-6 bg-gruv-bg-soft border border-gruv-fg-dim/30 text-gruv-fg text-base font-bold tracking-wide hover:bg-gruv-fg-dim/10 transition-colors"
           >
-            <span class="material-symbols-outlined text-[20px]">menu_book</span>
+            <Icon icon="mdi:book-open-variant" class="text-xl" />
             Documentation
           </a>
         </div>

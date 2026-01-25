@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { Icon } from "@iconify/vue";
+</script>
+
 <template>
   <div class="bg-gruv-bg-soft/50 py-20 px-6" id="features">
     <div class="max-w-[1200px] mx-auto">
@@ -19,7 +23,7 @@
           <div
             class="text-gruv-orange size-12 flex items-center justify-center bg-gruv-orange/10 rounded group-hover:scale-110 transition-transform"
           >
-            <span class="material-symbols-outlined">bolt</span>
+            <Icon icon="mdi:bolt" class="text-2xl" />
           </div>
           <div>
             <h3 class="text-xl font-bold mb-2 text-gruv-fg">
@@ -37,7 +41,7 @@
           <div
             class="text-gruv-blue size-12 flex items-center justify-center bg-gruv-blue/10 rounded group-hover:scale-110 transition-transform"
           >
-            <span class="material-symbols-outlined">cloud_sync</span>
+            <Icon icon="mdi:cloud-sync" class="text-2xl" />
           </div>
           <div>
             <h3 class="text-xl font-bold mb-2 text-gruv-fg">Remote SSH/SFTP</h3>
@@ -53,7 +57,7 @@
           <div
             class="text-gruv-green size-12 flex items-center justify-center bg-gruv-green/10 rounded group-hover:scale-110 transition-transform"
           >
-            <span class="material-symbols-outlined">account_tree</span>
+            <Icon icon="mdi:git" class="text-2xl" />
           </div>
           <div>
             <h3 class="text-xl font-bold mb-2 text-gruv-fg">Git Integration</h3>
@@ -69,7 +73,7 @@
           <div
             class="text-gruv-yellow size-12 flex items-center justify-center bg-gruv-yellow/10 rounded group-hover:scale-110 transition-transform"
           >
-            <span class="material-symbols-outlined">search</span>
+            <Icon icon="mdi:magnify" class="text-2xl" />
           </div>
           <div>
             <h3 class="text-xl font-bold mb-2 text-gruv-fg">Fuzzy Search</h3>
@@ -85,7 +89,7 @@
           <div
             class="text-gruv-aqua size-12 flex items-center justify-center bg-gruv-aqua/10 rounded group-hover:scale-110 transition-transform"
           >
-            <span class="material-symbols-outlined">tab</span>
+            <Icon icon="mdi:tab" class="text-2xl" />
           </div>
           <div>
             <h3 class="text-xl font-bold mb-2 text-gruv-fg">
@@ -103,7 +107,7 @@
           <div
             class="text-gruv-orange size-12 flex items-center justify-center bg-gruv-orange/10 rounded group-hover:scale-110 transition-transform"
           >
-            <span class="material-symbols-outlined">inventory_2</span>
+            <Icon icon="mdi:archive" class="text-2xl" />
           </div>
           <div>
             <h3 class="text-xl font-bold mb-2 text-gruv-fg">Archive Support</h3>

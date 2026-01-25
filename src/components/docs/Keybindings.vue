@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { Icon } from "@iconify/vue";
+</script>
+
 <template>
   <section id="keybindings" class="mb-24 scroll-mt-24">
     <h2 class="text-3xl font-bold text-gruv-fg mb-8 flex items-center gap-3">
@@ -10,7 +14,7 @@
         <h3
           class="text-lg font-bold text-gruv-orange mb-4 flex items-center gap-2"
         >
-          <span class="material-symbols-outlined text-base">navigation</span>
+          <Icon icon="mdi:navigation" class="text-base" />
           Navigation
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
@@ -74,7 +78,7 @@
         <h3
           class="text-lg font-bold text-gruv-orange mb-4 flex items-center gap-2"
         >
-          <span class="material-symbols-outlined text-base">check_box</span>
+          <Icon icon="mdi:checkbox-marked-outline" class="text-base" />
           Selection & Bulk
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
@@ -106,7 +110,7 @@
         <h3
           class="text-lg font-bold text-gruv-orange mb-4 flex items-center gap-2"
         >
-          <span class="material-symbols-outlined text-base">tab</span> Tabs
+          <Icon icon="mdi:tab" class="text-base" /> Tabs
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
           <div
@@ -141,7 +145,7 @@
         <h3
           class="text-lg font-bold text-gruv-orange mb-4 flex items-center gap-2"
         >
-          <span class="material-symbols-outlined text-base">content_copy</span>
+          <Icon icon="mdi:content-copy" class="text-base" />
           File Operations
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
@@ -205,7 +209,7 @@
         <h3
           class="text-lg font-bold text-gruv-orange mb-4 flex items-center gap-2"
         >
-          <span class="material-symbols-outlined text-base">search</span> Search
+          <Icon icon="mdi:magnify" class="text-base" /> Search
           & Filter
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
@@ -240,7 +244,7 @@
         <h3
           class="text-lg font-bold text-gruv-orange mb-4 flex items-center gap-2"
         >
-          <span class="material-symbols-outlined text-base">more_horiz</span>
+          <Icon icon="mdi:dots-horizontal" class="text-base" />
           Miscellaneous
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
