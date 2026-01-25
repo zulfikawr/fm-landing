@@ -2,22 +2,21 @@
 import Navbar from "../components/Navbar.vue";
 import Footer from "../components/Footer.vue";
 import Sidebar from "../components/docs/Sidebar.vue";
-import Introduction from "../components/docs/Introduction.vue";
-import GettingStarted from "../components/docs/GettingStarted.vue";
-import Keybindings from "../components/docs/Keybindings.vue";
-import Features from "../components/docs/Features.vue";
-import RemoteAccess from "../components/docs/RemoteAccess.vue";
-import Configuration from "../components/docs/Configuration.vue";
+import DocSection from "../components/docs/DocSection.vue";
 import Changelog from "../components/docs/Changelog.vue";
 import { ref, onMounted, nextTick } from "vue";
 
 const sections = ref([
-  { id: "introduction", title: "Introduction" },
-  { id: "getting-started", title: "Getting Started" },
-  { id: "keybindings", title: "Keybindings" },
-  { id: "features", title: "Features" },
-  { id: "remote-access", title: "Remote Access" },
-  { id: "configuration", title: "Configuration" },
+  { id: "introduction", title: "Introduction", fileName: "index.md" },
+  {
+    id: "getting-started",
+    title: "Getting Started",
+    fileName: "getting-started.md",
+  },
+  { id: "keybindings", title: "Keybindings", fileName: "keybindings.md" },
+  { id: "features", title: "Features", fileName: "features.md" },
+  { id: "remote-access", title: "Remote Access", fileName: "remote-access.md" },
+  { id: "configuration", title: "Configuration", fileName: "configuration.md" },
   { id: "changelog", title: "Changelog", versions: [] as string[] },
 ]);
 
@@ -51,7 +50,6 @@ onMounted(async () => {
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        // If we are scrolling down, the last intersecting section is the most "active"
         if (entry.isIntersecting) {
           activeSection.value = entry.target.id;
         }
@@ -80,14 +78,16 @@ onMounted(async () => {
       <Sidebar :sections="sections" :activeSection="activeSection" />
 
       <!-- Main Content -->
-      <main class="flex-1 max-w-3xl prose prose-invert prose-gruvbox">
-        <Introduction />
-        <GettingStarted />
-        <Keybindings />
-        <Features />
-        <RemoteAccess />
-        <Configuration />
-        <Changelog />
+      <main class="flex-1 max-w-3xl">
+        <template v-for="section in sections" :key="section.id">
+          <DocSection
+            v-if="section.fileName"
+            :id="section.id"
+            :title="section.title"
+            :fileName="section.fileName"
+          />
+          <Changelog v-else-if="section.id === 'changelog'" />
+        </template>
       </main>
     </div>
 
@@ -99,7 +99,6 @@ onMounted(async () => {
 .prose {
   max-width: none;
 }
-/* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
 }
