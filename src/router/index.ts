@@ -22,13 +22,31 @@ const router = createRouter({
       component: Changelog,
     },
   ],
-  scrollBehavior(_to, _from, savedPosition) {
+  scrollBehavior(to, _from, savedPosition) {
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: "smooth",
+        top: 80,
+      };
+    }
     if (savedPosition) {
       return savedPosition;
     } else {
       return { top: 0 };
     }
   },
+});
+
+router.afterEach((to) => {
+  const baseTitle = "FM - Terminal File Manager";
+  if (to.name === "docs") {
+    document.title = `Documentation | ${baseTitle}`;
+  } else if (to.name === "changelog") {
+    document.title = `Changelog | ${baseTitle}`;
+  } else {
+    document.title = baseTitle;
+  }
 });
 
 export default router;

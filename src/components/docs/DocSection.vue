@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, watch } from "vue";
+import { Icon } from "@iconify/vue";
 import { marked } from "marked";
 import hljs from "highlight.js/lib/core";
 import bash from "highlight.js/lib/languages/bash";
@@ -23,19 +24,66 @@ const props = defineProps<{
 
 const htmlContent = ref("");
 const isLoading = ref(true);
+const lastUpdated = ref("");
+const toc = ref<{ id: string; text: string }[]>([]);
+const activeSubSection = ref("");
+
+const CACHE_KEY = (file: string) => `doc_cache_${file}`;
+
+let observer: IntersectionObserver | null = null;
+
+const setupObserver = () => {
+  if (observer) observer.disconnect();
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          activeSubSection.value = entry.target.id;
+        }
+      });
+    },
+    {
+      rootMargin: "-100px 0px -80% 0px",
+      threshold: 0,
+    },
+  );
+
+  const sectionEl = document.getElementById(props.id);
+  if (sectionEl) {
+    sectionEl.querySelectorAll("h3[id]").forEach((el) => {
+      observer?.observe(el);
+    });
+  }
+};
 
 const fetchContent = async () => {
-  isLoading.value = true;
+  const cached = localStorage.getItem(CACHE_KEY(props.fileName));
+  if (cached) {
+    const data = JSON.parse(cached);
+    htmlContent.value = data.html;
+    lastUpdated.value = data.updated;
+    isLoading.value = false;
+    await nextTick();
+    setupObserver();
+  }
+
   try {
-    const response = await fetch(
-      `https://raw.githubusercontent.com/zulfikawr/fm/main/docs/${props.fileName}`,
-    );
-    let text = await response.text();
+    const [contentRes, commitRes] = await Promise.all([
+      fetch(
+        `https://raw.githubusercontent.com/zulfikawr/fm/main/docs/${props.fileName}`,
+      ),
+      fetch(
+        `https://api.github.com/repos/zulfikawr/fm/commits?path=docs/${props.fileName}&per_page=1`,
+      ),
+    ]);
+
+    let text = await contentRes.text();
 
     // 1. Remove the main H1 header
     text = text.replace(/^#\s+.+$/m, "");
 
-    // 2. Fix local markdown links to point to anchor tags in the same page
+    // 2. Fix local markdown links
     text = text.replace(
       /\[([^\]]+)\]\((\.\/)?([^)]+)\.md\)/g,
       (_match, title, _dotSlash, filename) => {
@@ -44,11 +92,54 @@ const fetchContent = async () => {
       },
     );
 
-    const html = (await marked.parse(text)) as string;
-    htmlContent.value = html;
+    // 3. Extract TOC (H3 tags) and add IDs
+    const tocItems: { id: string; text: string }[] = [];
+    // We add a marker to identify and set IDs after parsing
+    text = text.replace(/^###\s+(.+)$/gm, (_match, title) => {
+      const id = title.toLowerCase().replace(/[^\w]+/g, "-");
+      tocItems.push({ id, text: title });
+      return `### ${title} <!-- id:${id} -->`;
+    });
+    toc.value = tocItems;
 
-    // 3. Ensure syntax highlighting is applied with a slight delay to ensure DOM is ready
+    const html = (await marked.parse(text)) as string;
+
+    // Post-process HTML to move IDs from comments to headers
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    tempDiv.querySelectorAll("h3").forEach((h3) => {
+      const commentMatch = h3.innerHTML.match(/<!-- id:([\w-]+) -->/);
+      if (commentMatch && commentMatch[1]) {
+        h3.id = commentMatch[1];
+        h3.innerHTML = h3.innerHTML.replace(/<!-- id:[\w-]+ -->/, "");
+      }
+    });
+
+    htmlContent.value = tempDiv.innerHTML;
+
+    // Last updated from GitHub
+    const commits = await commitRes.json();
+    if (commits && commits[0]) {
+      const date = new Date(commits[0].commit.committer.date);
+      lastUpdated.value = date.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    }
+
+    // Cache it
+    localStorage.setItem(
+      CACHE_KEY(props.fileName),
+      JSON.stringify({
+        html: htmlContent.value,
+        updated: lastUpdated.value,
+      }),
+    );
+
+    // 4. Syntax highlighting and observer setup
     await nextTick();
+    setupObserver();
     setTimeout(() => {
       const sectionEl = document.getElementById(props.id);
       if (sectionEl) {
@@ -59,7 +150,9 @@ const fetchContent = async () => {
     }, 100);
   } catch (error) {
     console.error(`Failed to fetch doc section ${props.id}:`, error);
-    htmlContent.value = `<p style="color: var(--color-gruv-red)">Failed to load section: ${props.title}</p>`;
+    if (!htmlContent.value) {
+      htmlContent.value = `<p style="color: var(--color-gruv-red)">Failed to load section: ${props.title}</p>`;
+    }
   } finally {
     isLoading.value = false;
   }
@@ -70,14 +163,64 @@ watch(() => props.fileName, fetchContent);
 </script>
 
 <template>
-  <section :id="id" class="mb-24 scroll-mt-24">
-    <h2 class="text-3xl font-bold text-gruv-fg mb-8 flex items-center gap-3">
-      <span class="text-gruv-orange">#</span> {{ title }}
-    </h2>
+  <section :id="id" class="mb-32 scroll-mt-24 relative group/section">
+    <div class="flex flex-col gap-2 mb-8">
+      <h2 class="text-3xl font-bold text-gruv-fg flex items-center gap-3">
+        <span class="text-gruv-orange">#</span> {{ title }}
+      </h2>
+      <div
+        v-if="lastUpdated"
+        class="text-[10px] text-gruv-fg-dim/50 uppercase tracking-widest"
+      >
+        Last updated: {{ lastUpdated }}
+      </div>
+    </div>
 
-    <div v-if="isLoading" class="text-gruv-fg-dim italic">
+    <!-- Page TOC for desktop -->
+    <div
+      v-if="toc.length > 0"
+      class="hidden xl:block absolute left-full ml-12 top-0 w-48 h-full"
+    >
+      <div class="sticky top-24">
+        <h5
+          class="text-[10px] font-bold text-gruv-fg-dim/40 uppercase tracking-widest mb-4"
+        >
+          On this page
+        </h5>
+        <ul class="flex flex-col gap-3 border-l border-gruv-fg-dim/10">
+          <li v-for="item in toc" :key="item.id">
+            <a
+              :href="'#' + item.id"
+              class="text-xs pl-4 block transition-all border-l-2 -ml-[1px]"
+              :class="
+                activeSubSection === item.id
+                  ? 'text-gruv-orange border-gruv-orange font-bold'
+                  : 'text-gruv-fg-dim border-transparent hover:text-gruv-fg hover:border-gruv-fg-dim/30'
+              "
+            >
+              {{ item.text }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div v-if="isLoading && !htmlContent" class="text-gruv-fg-dim italic">
       Loading {{ title.toLowerCase() }}...
     </div>
     <div v-else class="doc-content-md" v-html="htmlContent"></div>
+
+    <div
+      class="mt-12 pt-6 border-t border-gruv-fg-dim/5 flex justify-between items-center"
+    >
+      <a
+        :href="`https://github.com/zulfikawr/fm/edit/main/docs/${fileName}`"
+        target="_blank"
+        class="text-xs text-gruv-fg-dim hover:text-gruv-orange flex items-center gap-2 transition-colors"
+      >
+        <Icon icon="mdi:pencil" />
+        Edit this page on GitHub
+      </a>
+    </div>
   </section>
 </template>
