@@ -38,7 +38,7 @@ const fetchContent = async () => {
     // 2. Fix local markdown links to point to anchor tags in the same page
     text = text.replace(
       /\[([^\]]+)\]\((\.\/)?([^)]+)\.md\)/g,
-      (match, title, dotSlash, filename) => {
+      (_match, title, _dotSlash, filename) => {
         if (filename === "index") return `[${title}](#introduction)`;
         return `[${title}](#${filename})`;
       },
