@@ -16,6 +16,9 @@ const sections = ref([
   { id: "features", title: "Features", fileName: "features.md" },
   { id: "remote-access", title: "Remote Access", fileName: "remote-access.md" },
   { id: "configuration", title: "Configuration", fileName: "configuration.md" },
+  { id: "icons", title: "Icons & Fonts", fileName: "icons.md" },
+  { id: "mouse-support", title: "Mouse Support", fileName: "mouse-support.md" },
+  { id: "cli-reference", title: "CLI Reference", fileName: "cli-reference.md" },
 ]);
 
 const activeSection = ref("introduction");

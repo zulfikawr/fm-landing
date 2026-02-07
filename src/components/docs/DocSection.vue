@@ -140,14 +140,42 @@ const fetchContent = async () => {
     // 4. Syntax highlighting and observer setup
     await nextTick();
     setupObserver();
-    setTimeout(() => {
-      const sectionEl = document.getElementById(props.id);
-      if (sectionEl) {
-        sectionEl.querySelectorAll("pre code").forEach((el) => {
-          hljs.highlightElement(el as HTMLElement);
-        });
-      }
-    }, 100);
+    
+    const sectionEl = document.getElementById(props.id);
+    if (sectionEl) {
+      // Syntax highlighting
+      sectionEl.querySelectorAll("pre code").forEach((el) => {
+        hljs.highlightElement(el as HTMLElement);
+      });
+
+      // Add copy buttons to code blocks
+      sectionEl.querySelectorAll("pre").forEach((pre) => {
+        if (pre.querySelector(".copy-button")) return;
+        
+        pre.style.position = "relative";
+        pre.classList.add("group/code");
+        
+        const button = document.createElement("button");
+        button.className = "copy-button absolute top-3 right-3 p-2 rounded-md bg-gruv-bg-soft border border-gruv-fg-dim/20 text-gruv-fg-dim hover:text-gruv-orange hover:border-gruv-orange/50 transition-all opacity-0 group-hover/code:opacity-100 cursor-pointer z-10";
+        button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+        button.title = "Copy to clipboard";
+        
+        button.onclick = async () => {
+          const code = pre.querySelector("code")?.innerText || "";
+          try {
+            await navigator.clipboard.writeText(code);
+            button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gruv-green"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+            setTimeout(() => {
+              button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+            }, 2000);
+          } catch (err) {
+            console.error("Failed to copy:", err);
+          }
+        };
+        
+        pre.appendChild(button);
+      });
+    }
   } catch (error) {
     console.error(`Failed to fetch doc section ${props.id}:`, error);
     if (!htmlContent.value) {
