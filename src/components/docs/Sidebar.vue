@@ -12,7 +12,7 @@ const searchQuery = ref("");
 const filteredSections = computed(() => {
   if (!searchQuery.value) return props.sections;
   return props.sections.filter((s) =>
-    s.title.toLowerCase().includes(searchQuery.value.toLowerCase()),
+    s.title.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
 </script>

@@ -8,7 +8,7 @@ const releaseTag = ref("...");
 onMounted(async () => {
   try {
     const response = await fetch(
-      "https://api.github.com/repos/zulfikawr/fm/releases/latest",
+      "https://api.github.com/repos/zulfikawr/fm/releases/latest"
     );
     const data = await response.json();
     if (data.tag_name) {

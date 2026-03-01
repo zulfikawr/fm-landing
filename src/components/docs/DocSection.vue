@@ -46,7 +46,7 @@ const setupObserver = () => {
     {
       rootMargin: "-100px 0px -80% 0px",
       threshold: 0,
-    },
+    }
   );
 
   const sectionEl = document.getElementById(props.id);
@@ -71,10 +71,10 @@ const fetchContent = async () => {
   try {
     const [contentRes, commitRes] = await Promise.all([
       fetch(
-        `https://raw.githubusercontent.com/zulfikawr/fm/main/docs/${props.fileName}`,
+        `https://raw.githubusercontent.com/zulfikawr/fm/main/docs/${props.fileName}`
       ),
       fetch(
-        `https://api.github.com/repos/zulfikawr/fm/commits?path=docs/${props.fileName}&per_page=1`,
+        `https://api.github.com/repos/zulfikawr/fm/commits?path=docs/${props.fileName}&per_page=1`
       ),
     ]);
 
@@ -89,7 +89,7 @@ const fetchContent = async () => {
       (_match, title, _dotSlash, filename) => {
         if (filename === "index") return `[${title}](#introduction)`;
         return `[${title}](#${filename})`;
-      },
+      }
     );
 
     // 3. Extract TOC (H3 tags) and add IDs
@@ -134,13 +134,13 @@ const fetchContent = async () => {
       JSON.stringify({
         html: htmlContent.value,
         updated: lastUpdated.value,
-      }),
+      })
     );
 
     // 4. Syntax highlighting and observer setup
     await nextTick();
     setupObserver();
-    
+
     const sectionEl = document.getElementById(props.id);
     if (sectionEl) {
       // Syntax highlighting
@@ -151,15 +151,16 @@ const fetchContent = async () => {
       // Add copy buttons to code blocks
       sectionEl.querySelectorAll("pre").forEach((pre) => {
         if (pre.querySelector(".copy-button")) return;
-        
+
         pre.style.position = "relative";
         pre.classList.add("group/code");
-        
+
         const button = document.createElement("button");
-        button.className = "copy-button absolute top-3 right-3 p-2 rounded-md bg-gruv-bg-soft border border-gruv-fg-dim/20 text-gruv-fg-dim hover:text-gruv-orange hover:border-gruv-orange/50 transition-all opacity-0 group-hover/code:opacity-100 cursor-pointer z-10";
+        button.className =
+          "copy-button absolute top-3 right-3 p-2 rounded-md bg-gruv-bg-soft border border-gruv-fg-dim/20 text-gruv-fg-dim hover:text-gruv-orange hover:border-gruv-orange/50 transition-all opacity-0 group-hover/code:opacity-100 cursor-pointer z-10";
         button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
         button.title = "Copy to clipboard";
-        
+
         button.onclick = async () => {
           const code = pre.querySelector("code")?.innerText || "";
           try {
@@ -172,7 +173,7 @@ const fetchContent = async () => {
             console.error("Failed to copy:", err);
           }
         };
-        
+
         pre.appendChild(button);
       });
     }

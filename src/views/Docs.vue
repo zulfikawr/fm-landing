@@ -37,7 +37,7 @@ onMounted(async () => {
     {
       rootMargin: "-100px 0px -60% 0px",
       threshold: 0,
-    },
+    }
   );
 
   sections.value.forEach((section) => {
@@ -54,16 +54,16 @@ onMounted(async () => {
     <div
       class="max-w-[1200px] mx-auto px-6 py-12 flex flex-col md:flex-row gap-12 grow w-full pb-32"
     >
-      <Sidebar :sections="sections" :activeSection="activeSection" />
+      <Sidebar :sections="sections" :active-section="activeSection" />
 
       <!-- Main Content -->
       <main class="flex-1 max-w-3xl">
         <DocSection
           v-for="section in sections"
-          :key="section.id"
           :id="section.id"
+          :key="section.id"
           :title="section.title"
-          :fileName="section.fileName"
+          :file-name="section.fileName"
         />
       </main>
     </div>

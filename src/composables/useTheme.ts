@@ -11,7 +11,9 @@ export type Theme =
   | "catppuccin-mocha"
   | "red";
 
-const currentTheme = ref<Theme>((localStorage.getItem("fm-theme") as Theme) || "gruvbox");
+const currentTheme = ref<Theme>(
+  (localStorage.getItem("fm-theme") as Theme) || "gruvbox"
+);
 
 export function useTheme() {
   const setTheme = (theme: Theme) => {

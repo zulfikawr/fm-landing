@@ -16,24 +16,31 @@ const currentPath = ref("");
 const files = ref<FileItem[]>([]);
 const isLoading = ref(true);
 
+interface GitHubItem {
+  name: string;
+  path: string;
+  size: number;
+  type: string;
+}
+
 const fetchFiles = async (path: string) => {
   isLoading.value = true;
   try {
     const response = await fetch(
-      `https://api.github.com/repos/zulfikawr/fm/contents/${path}`,
+      `https://api.github.com/repos/zulfikawr/fm/contents/${path}`
     );
     const data = await response.json();
 
     if (Array.isArray(data)) {
       // Sort: Directories first, then alphabetically
-      const sortedData = data.sort((a, b) => {
+      const sortedData = (data as GitHubItem[]).sort((a, b) => {
         if (a.type === b.type) {
           return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
         }
         return a.type === "dir" ? -1 : 1;
       });
 
-      const mappedFiles: FileItem[] = sortedData.map((f: any) => ({
+      const mappedFiles: FileItem[] = sortedData.map((f: GitHubItem) => ({
         name: f.type === "dir" ? f.name + "/" : f.name,
         size: f.type === "dir" ? "" : formatSize(f.size),
         type: f.type,
@@ -144,16 +151,16 @@ onMounted(() => {
             Loading...
           </div>
           <div
-            v-else
             v-for="(file, index) in files"
+            v-else
             :key="file.path || index"
-            @click="handleAction(file, index)"
             class="px-3 py-0.5 flex justify-between items-center cursor-pointer transition-colors"
             :class="
               selectedIndex === index
                 ? 'bg-gruv-bg-soft/50'
                 : 'hover:bg-gruv-bg-soft/10'
             "
+            @click="handleAction(file, index)"
           >
             <div class="flex items-center gap-2 truncate pr-4">
               <span

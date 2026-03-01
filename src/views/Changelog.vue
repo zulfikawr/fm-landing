@@ -21,7 +21,7 @@ const activeVersion = ref("");
 onMounted(async () => {
   try {
     const response = await fetch(
-      "https://raw.githubusercontent.com/zulfikawr/fm/main/CHANGELOG.md",
+      "https://raw.githubusercontent.com/zulfikawr/fm/main/CHANGELOG.md"
     );
     const text = await response.text();
 
@@ -49,47 +49,49 @@ onMounted(async () => {
       /##\s+\[?v?(\d+\.\d+\.\d+)\]?/g,
       (_match, version) => {
         return `## [v${version}] <!-- id:v${version.replace(/\./g, "-")} -->`;
-      },
+      }
     );
 
     const html = (await marked.parse(processedText)) as string;
-    
+
     // Post-process HTML to move IDs from comments to headers
-    const tempDiv = document.createElement('div');
+    const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html;
-    tempDiv.querySelectorAll('h2').forEach(h2 => {
+    tempDiv.querySelectorAll("h2").forEach((h2) => {
       const commentMatch = h2.innerHTML.match(/<!--\s*id:(v[\w-]+)\s*-->/);
       if (commentMatch && commentMatch[1]) {
         h2.id = commentMatch[1];
-        h2.innerHTML = h2.innerHTML.replace(/<!--\s*id:v[\w-]+\s*-->/, '');
-        h2.classList.add('scroll-mt-24');
+        h2.innerHTML = h2.innerHTML.replace(/<!--\s*id:v[\w-]+\s*-->/, "");
+        h2.classList.add("scroll-mt-24");
       }
     });
-    
+
     changelogHtml.value = tempDiv.innerHTML;
 
     await nextTick();
     document.querySelectorAll(".changelog-md pre code").forEach((el) => {
       hljs.highlightElement(el as HTMLElement);
     });
-
-    } finally {
+  } finally {
     isLoading.value = false;
   }
 
   // Setup intersection observer for TOC after loading is complete
   await nextTick();
-  
+
   const observer = new IntersectionObserver(
     (entries) => {
       // Filter for elements that are currently entering or inside the viewport
-      const intersecting = entries.filter(e => e.isIntersecting);
+      const intersecting = entries.filter((e) => e.isIntersecting);
       if (intersecting.length > 0) {
         // Find the one closest to the top of the viewport
         const topMost = intersecting.reduce((prev, curr) => {
-          return (Math.abs(curr.boundingClientRect.top) < Math.abs(prev.boundingClientRect.top)) ? curr : prev;
+          return Math.abs(curr.boundingClientRect.top) <
+            Math.abs(prev.boundingClientRect.top)
+            ? curr
+            : prev;
         });
-        
+
         const id = topMost.target.id;
         if (id && id.startsWith("v")) {
           activeVersion.value = id.substring(1).replace(/-/g, ".");
@@ -99,7 +101,7 @@ onMounted(async () => {
     {
       rootMargin: "-80px 0px -80% 0px",
       threshold: [0, 1.0],
-    },
+    }
   );
 
   document.querySelectorAll(".changelog-md h2[id^='v']").forEach((el) => {
@@ -115,7 +117,7 @@ onMounted(async () => {
     <div
       class="max-w-[1200px] mx-auto px-6 py-12 flex flex-col md:flex-row gap-12 grow w-full pb-32"
     >
-      <ChangelogSidebar :versions="versions" :activeVersion="activeVersion" />
+      <ChangelogSidebar :versions="versions" :active-version="activeVersion" />
 
       <!-- Main Content -->
       <main class="flex-1 max-w-3xl">

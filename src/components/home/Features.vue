@@ -3,7 +3,7 @@ import { Icon } from "@iconify/vue";
 </script>
 
 <template>
-  <div class="bg-gruv-bg-soft/50 py-20 px-6" id="features">
+  <div id="features" class="bg-gruv-bg-soft/50 py-20 px-6">
     <div class="max-w-[1200px] mx-auto">
       <div class="flex flex-col gap-4 mb-16 text-center">
         <h2 class="text-4xl font-bold tracking-tight text-gruv-fg">

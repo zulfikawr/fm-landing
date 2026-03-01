@@ -67,14 +67,18 @@ onUnmounted(() => {
           Changelog
         </router-link>
 
-        <div class="relative" ref="dropdownRef">
+        <div ref="dropdownRef" class="relative">
           <button
-            @click="toggleDropdown"
             class="flex items-center gap-2 text-sm font-bold text-gruv-fg-dim hover:text-gruv-orange px-4 py-2 transition-all rounded border border-gruv-fg-dim/10 hover:border-gruv-orange/30"
+            @click="toggleDropdown"
           >
             <Icon icon="mdi:palette" class="text-lg" />
-            <span class="capitalize">{{ currentTheme.replace('-', ' ') }}</span>
-            <Icon icon="mdi:chevron-down" class="text-xs transition-transform" :class="{ 'rotate-180': isDropdownOpen }" />
+            <span class="capitalize">{{ currentTheme.replace("-", " ") }}</span>
+            <Icon
+              icon="mdi:chevron-down"
+              class="text-xs transition-transform"
+              :class="{ 'rotate-180': isDropdownOpen }"
+            />
           </button>
 
           <div
@@ -84,9 +88,13 @@ onUnmounted(() => {
             <button
               v-for="theme in themes"
               :key="theme.id"
-              @click="selectTheme(theme.id)"
               class="w-full flex items-center gap-3 px-4 py-2 text-sm text-left hover:bg-gruv-orange/10 transition-colors group"
-              :class="currentTheme === theme.id ? 'text-gruv-orange' : 'text-gruv-fg-dim hover:text-gruv-fg'"
+              :class="
+                currentTheme === theme.id
+                  ? 'text-gruv-orange'
+                  : 'text-gruv-fg-dim hover:text-gruv-fg'
+              "
+              @click="selectTheme(theme.id)"
             >
               <div
                 class="size-3 rounded-full border border-white/10"
