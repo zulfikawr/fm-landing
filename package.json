@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "fm-landing",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,20 +12,20 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/vue": "^5.0.0",
     "highlight.js": "^11.11.1",
-    "marked": "^17.0.1",
-    "vue": "^3.5.24",
-    "vue-router": "4"
+    "marked": "^17.0.3",
+    "vue": "^3.5.29",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.18",
-    "@types/node": "^24.10.1",
-    "@vitejs/plugin-vue": "^6.0.1",
+    "@tailwindcss/vite": "^4.2.1",
+    "@types/node": "^24.11.0",
+    "@vitejs/plugin-vue": "^6.0.4",
     "@vue/tsconfig": "^0.8.1",
-    "autoprefixer": "^10.4.23",
+    "autoprefixer": "^10.4.27",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.18",
+    "tailwindcss": "^4.2.1",
     "typescript": "~5.9.3",
-    "vite": "^7.2.4",
-    "vue-tsc": "^3.1.4"
+    "vite": "^7.3.1",
+    "vue-tsc": "^3.2.5"
   }
 }

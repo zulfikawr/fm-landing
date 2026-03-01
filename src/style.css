@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --color-gruv-bg: #282828;
-  --color-gruv-bg-soft: #32302f;
-  --color-gruv-bg-dark: #1d2021;
-  --color-gruv-terminal: #000000;
-  --color-gruv-fg: #ebdbb2;
-  --color-gruv-fg-dim: #a89984;
-  --color-gruv-orange: #fe8019;
-  --color-gruv-green: #b8bb26;
-  --color-gruv-yellow: #fabd2f;
-  --color-gruv-blue: #83a598;
-  --color-gruv-red: #fb4934;
-  --color-gruv-aqua: #8ec07c;
-  --color-primary: #fe8019;
+  --color-gruv-bg: var(--bg);
+  --color-gruv-bg-soft: var(--bg-soft);
+  --color-gruv-bg-dark: var(--bg-dark);
+  --color-gruv-terminal: var(--bg-terminal);
+  --color-gruv-fg: var(--fg);
+  --color-gruv-fg-dim: var(--fg-dim);
+  --color-gruv-orange: var(--primary);
+  --color-gruv-green: var(--green);
+  --color-gruv-yellow: var(--yellow);
+  --color-gruv-blue: var(--blue);
+  --color-gruv-red: var(--red);
+  --color-gruv-aqua: var(--aqua);
+  --color-primary: var(--primary);
 
   --font-display: "Space Grotesk", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
@@ -25,13 +25,147 @@
 
 @layer base {
   :root {
-    --gruv-bg: #282828;
-    --gruv-bg-soft: #32302f;
-    --gruv-fg: #ebdbb2;
-    --gruv-orange: #fe8019;
-    --gruv-green: #b8bb26;
-    --gruv-yellow: #fabd2f;
-    --gruv-blue: #83a598;
+    /* Gruvbox (Default) */
+    --bg: #282828;
+    --bg-soft: #32302f;
+    --bg-dark: #1d2021;
+    --bg-terminal: #000000;
+    --fg: #ebdbb2;
+    --fg-dim: #a89984;
+    --primary: #fe8019;
+    --green: #b8bb26;
+    --yellow: #fabd2f;
+    --blue: #83a598;
+    --red: #fb4934;
+    --aqua: #8ec07c;
+
+    --gruv-bg: var(--bg);
+    --gruv-bg-soft: var(--bg-soft);
+    --gruv-fg: var(--fg);
+    --gruv-orange: var(--primary);
+    --gruv-green: var(--green);
+    --gruv-yellow: var(--yellow);
+    --gruv-blue: var(--blue);
+  }
+
+  [data-theme="nord"] {
+    --bg: #2e3440;
+    --bg-soft: #3b4252;
+    --bg-dark: #242933;
+    --bg-terminal: #1a1e25;
+    --fg: #eceff4;
+    --fg-dim: #d8dee9;
+    --primary: #88c0d0;
+    --green: #a3be8c;
+    --yellow: #ebcb8b;
+    --blue: #81a1c1;
+    --red: #bf616a;
+    --aqua: #8fbcbb;
+  }
+
+  [data-theme="dracula"] {
+    --bg: #282a36;
+    --bg-soft: #44475a;
+    --bg-dark: #191a21;
+    --bg-terminal: #000000;
+    --fg: #f8f8f2;
+    --fg-dim: #6272a4;
+    --primary: #bd93f9;
+    --green: #50fa7b;
+    --yellow: #f1fa8c;
+    --blue: #8be9fd;
+    --red: #ff5555;
+    --aqua: #8be9fd;
+  }
+
+  [data-theme="monokai"] {
+    --bg: #272822;
+    --bg-soft: #3e3d32;
+    --bg-dark: #19181a;
+    --bg-terminal: #000000;
+    --fg: #f8f8f2;
+    --fg-dim: #75715e;
+    --primary: #f92672;
+    --green: #a6e22e;
+    --yellow: #e6db74;
+    --blue: #66d9ef;
+    --red: #f92672;
+    --aqua: #a1efe4;
+  }
+
+  [data-theme="solarized-dark"] {
+    --bg: #002b36;
+    --bg-soft: #073642;
+    --bg-dark: #001e26;
+    --bg-terminal: #001e26;
+    --fg: #839496;
+    --fg-dim: #586e75;
+    --primary: #268bd2;
+    --green: #859900;
+    --yellow: #b58900;
+    --blue: #268bd2;
+    --red: #dc322f;
+    --aqua: #2aa198;
+  }
+
+  [data-theme="tokyo-night"] {
+    --bg: #1a1b26;
+    --bg-soft: #24283b;
+    --bg-dark: #16161e;
+    --bg-terminal: #16161e;
+    --fg: #c0caf5;
+    --fg-dim: #565f89;
+    --primary: #7aa2f7;
+    --green: #9ece6a;
+    --yellow: #e0af68;
+    --blue: #7aa2f7;
+    --red: #f7768e;
+    --aqua: #7dcfff;
+  }
+
+  [data-theme="rose-pine"] {
+    --bg: #191724;
+    --bg-soft: #1f1d2e;
+    --bg-dark: #121019;
+    --bg-terminal: #121019;
+    --fg: #e0def4;
+    --fg-dim: #6e6a86;
+    --primary: #ebbcba;
+    --green: #31748f;
+    --yellow: #f6c177;
+    --blue: #9ccfd8;
+    --red: #eb6f92;
+    --aqua: #c4a7e7;
+  }
+
+  [data-theme="catppuccin-mocha"] {
+    --bg: #1e1e2e;
+    --bg-soft: #313244;
+    --bg-dark: #11111b;
+    --bg-terminal: #11111b;
+    --fg: #cdd6f4;
+    --fg-dim: #7f849c;
+    --primary: #b4befe;
+    --green: #a6e3a1;
+    --yellow: #f9e2af;
+    --blue: #89b4fa;
+    --red: #f38ba8;
+    --aqua: #94e2d5;
+  }
+
+  [data-theme="red"] {
+    --bg: #1a0000;
+    --bg-soft: #2d0000;
+    --bg-dark: #0d0000;
+    --bg-terminal: #000000;
+    --fg: #ffebeb;
+    --fg-dim: #884444;
+    --primary: #ff0000;
+    --green: #00ff00;
+    --yellow: #ffff00;
+    --blue: #4444ff;
+    --red: #ff0000;
+    --aqua: #00ffff;
   }
 
   body {
@@ -47,7 +181,7 @@
   .terminal-container {
     background: linear-gradient(
       135deg,
-      rgba(254, 128, 25, 0.2) 0%,
+      var(--primary) 0%,
       rgba(40, 40, 40, 0) 100%
     );
   }
